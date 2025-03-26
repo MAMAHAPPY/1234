@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>反應速度測試</title>
+    <style>
+        body {
+            background-color: #282c34;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        button {
+            background-color: #61afef;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 20px;
+            border: none;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #98c379;
+        }
+        h1 {
+            font-size: 32px;
+        }
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>反應速度測試</h1>
+<p id="message">點擊下方按鈕開始測試反應時間。</p>
+<button id="startButton">開始測試</button>
+<button id="clickButton" style="display: none;">點擊我！</button>
+
+<p id="reactionTime"></p>
+
+<script>
+    let startTime;
+    const messageElement = document.getElementById('message');
+    const reactionTimeElement = document.getElementById('reactionTime');
+    const startButton = document.getElementById('startButton');
+    const clickButton = document.getElementById('clickButton');
+
+    function startTest() {
+        messageElement.textContent = '請準備...';
+        startButton.disabled = true;
+        const delay = Math.random() * (5 - 2) + 2; // 隨機延遲2到5秒
+        setTimeout(showClickButton, delay * 1000);  // 延遲後顯示點擊按鈕
+    }
+
+    function showClickButton() {
+        messageElement.textContent = '現在！按下下方的按鈕！';
+        clickButton.style.display = 'inline-block';
+        startTime = Date.now(); // 記錄當前時間
+    }
+
+    function recordTime() {
+        const reactionTime = (Date.now() - startTime) / 1000; // 計算反應時間
+        reactionTimeElement.textContent = `你的反應速度是 ${reactionTime.toFixed(3)} 秒！`;
+
+        if (reactionTime < 0.2) {
+            reactionTimeElement.textContent += ' 哇！你的反應超快！';
+        } else if (reactionTime < 0.5) {
+            reactionTimeElement.textContent += ' 不錯！你的反應速度在平均水平之上！';
+        } else {
+            reactionTimeElement.textContent += ' 再試一次，看看能不能更快！';
+        }
+
+        clickButton.style.display = 'none';  // 隱藏點擊按鈕
+        startButton.disabled = false;  // 重新啟用開始測試按鈕
+        startButton.textContent = '再次測試';
+    }
+
+    startButton.addEventListener('click', startTest);
+    clickButton.addEventListener('click', recordTime);
+</script>
+
+</body>
+</html>
